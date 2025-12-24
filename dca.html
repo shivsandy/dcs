@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DCA – 100 Question Sectioned Practice</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f4f6f8; padding:20px; }
+.container { max-width:1200px; margin:auto; background:#fff; padding:20px; border-radius:8px; }
+.question { margin-bottom:22px; padding-bottom:15px; border-bottom:1px solid #ddd; }
+.section { font-size:13px; color:#666; margin-bottom:4px; }
+label { display:block; margin-left:16px; }
+button { margin-top:6px; }
+.correct { color:green; font-weight:bold; }
+.wrong { color:red; font-weight:bold; }
+#finalResult { margin-top:30px; font-size:18px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Docker Certified Associate – 100 Question Practice</h1>
+
+<div id="quiz"></div>
+
+<button onclick="finishExam()">Finish Exam</button>
+<div id="finalResult"></div>
+</div>
+
+<script>
+const questions = [
+/* CLI (1–15) */
+{s:"CLI",q:"Which command lists running containers?",o:["docker ps","docker ls","docker images","docker run"],a:"A"},
+{s:"CLI",q:"Which flag shows all containers?",o:["-l","-x","-a","--all-run"],a:"C"},
+{s:"CLI",q:"Which command removes a stopped container?",o:["docker rm","docker rmi","docker stop","docker delete"],a:"A"},
+{s:"CLI",q:"Which command shows Docker daemon info?",o:["docker version","docker status","docker info","docker inspect"],a:"C"},
+{s:"CLI",q:"Which command pulls an image?",o:["docker fetch","docker pull","docker clone","docker get"],a:"B"},
+{s:"CLI",q:"Which command pushes image to registry?",o:["docker upload","docker push","docker send","docker publish"],a:"B"},
+{s:"CLI",q:"Which command tags an image?",o:["docker label","docker rename","docker tag","docker alias"],a:"C"},
+{s:"CLI",q:"Which command lists images?",o:["docker ps","docker images","docker list","docker show"],a:"B"},
+{s:"CLI",q:"Which command stops a container?",o:["docker kill","docker stop","docker halt","docker pause"],a:"B"},
+{s:"CLI",q:"Which command restarts container?",o:["docker reload","docker reset","docker restart","docker rerun"],a:"C"},
+{s:"CLI",q:"Which command shows container logs?",o:["docker output","docker inspect","docker logs","docker events"],a:"C"},
+{s:"CLI",q:"Which command executes inside container?",o:["docker run","docker attach","docker exec","docker shell"],a:"C"},
+{s:"CLI",q:"Which command shows running processes in container?",o:["docker ps","docker top","docker stats","docker diff"],a:"B"},
+{s:"CLI",q:"Which command shows real-time resource usage?",o:["docker stats","docker info","docker monitor","docker usage"],a:"A"},
+{s:"CLI",q:"Which command removes unused resources?",o:["docker clean","docker system prune","docker flush","docker purge"],a:"B"},
+
+/* Dockerfile & Images (16–30) */
+{s:"Dockerfile",q:"Which instruction defines base image?",o:["RUN","CMD","FROM","BASE"],a:"C"},
+{s:"Dockerfile",q:"Which instruction executes during build?",o:["CMD","ENTRYPOINT","RUN","ENV"],a:"C"},
+{s:"Dockerfile",q:"Which instruction sets default command?",o:["RUN","CMD","FROM","COPY"],a:"B"},
+{s:"Dockerfile",q:"Which instruction copies files?",o:["ADD","COPY","MOVE","SYNC"],a:"B"},
+{s:"Dockerfile",q:"ADD differs from COPY because?",o:["Faster","Supports URL","Deprecated","Encrypted"],a:"B"},
+{s:"Dockerfile",q:"Which instruction sets env variable?",o:["ARG","ENV","LABEL","SET"],a:"B"},
+{s:"Dockerfile",q:"Which reduces final image size?",o:["More layers","Multi-stage build","ADD","EXPOSE"],a:"B"},
+{s:"Dockerfile",q:".dockerignore is used to?",o:["Ignore images","Ignore build context files","Ignore containers","Ignore volumes"],a:"B"},
+{s:"Dockerfile",q:"Which creates metadata only?",o:["RUN","LABEL","COPY","ADD"],a:"B"},
+{s:"Dockerfile",q:"Which instruction exposes port?",o:["PORT","EXPOSE","PUBLISH","MAP"],a:"B"},
+{s:"Dockerfile",q:"ARG availability?",o:["Runtime","Build-time","Both","Neither"],a:"B"},
+{s:"Dockerfile",q:"ENV availability?",o:["Build only","Runtime only","Both","None"],a:"C"},
+{s:"Dockerfile",q:"ENTRYPOINT purpose?",o:["Build","Main executable","Expose port","Copy files"],a:"B"},
+{s:"Dockerfile",q:"CMD overridden by?",o:["Dockerfile","docker run args","ENV","ARG"],a:"B"},
+{s:"Dockerfile",q:"Image layers are?",o:["Mutable","Immutable","Temporary","Dynamic"],a:"B"},
+
+/* Containers & Runtime (31–45) */
+{s:"Runtime",q:"Why container exits immediately?",o:["No CMD","No foreground process","No EXPOSE","No volume"],a:"B"},
+{s:"Runtime",q:"docker stop sends?",o:["SIGKILL","SIGTERM","SIGSTOP","SIGINT"],a:"B"},
+{s:"Runtime",q:"docker kill sends?",o:["SIGTERM","SIGKILL","SIGINT","SIGSTOP"],a:"B"},
+{s:"Runtime",q:"docker run -d means?",o:["Debug","Detach","Delete","Dry run"],a:"B"},
+{s:"Runtime",q:"docker run -it means?",o:["Isolated","Interactive TTY","Init task","Image tag"],a:"B"},
+{s:"Runtime",q:"docker attach does?",o:["Exec shell","Attach STDOUT","Restart","Commit"],a:"B"},
+{s:"Runtime",q:"docker pause does?",o:["Stop","Freeze processes","Kill","Restart"],a:"B"},
+{s:"Runtime",q:"docker unpause does?",o:["Restart","Resume","Kill","Stop"],a:"B"},
+{s:"Runtime",q:"docker diff shows?",o:["Logs","FS changes","Stats","Config"],a:"B"},
+{s:"Runtime",q:"docker inspect output?",o:["Text","JSON","YAML","INI"],a:"B"},
+{s:"Runtime",q:"Writable layer persists?",o:["Yes","No","Sometimes","Swarm only"],a:"B"},
+{s:"Runtime",q:"docker export exports?",o:["Image","Container FS","Volume","Network"],a:"B"},
+{s:"Runtime",q:"docker commit creates?",o:["Container","Image","Volume","Network"],a:"B"},
+{s:"Runtime",q:"Restart policy on failure?",o:["always","no","on-failure","unless-stopped"],a:"C"},
+{s:"Runtime",q:"Healthcheck used for?",o:["Security","Monitoring","Build","Logs"],a:"B"},
+
+/* Storage (46–60) */
+{s:"Storage",q:"Which persists data?",o:["tmpfs","Writable layer","Volume","Overlay"],a:"C"},
+{s:"Storage",q:"Default volume driver?",o:["nfs","local","overlay","aufs"],a:"B"},
+{s:"Storage",q:"docker volume ls shows?",o:["Images","Volumes","Containers","Networks"],a:"B"},
+{s:"Storage",q:"docker volume rm removes?",o:["Images","Volumes","Containers","Networks"],a:"B"},
+{s:"Storage",q:"Bind mount uses?",o:["Docker managed path","Host path","Encrypted FS","Tmpfs"],a:"B"},
+{s:"Storage",q:"tmpfs stored where?",o:["Disk","Memory","Volume","Overlay"],a:"B"},
+{s:"Storage",q:"Volume lifecycle tied to?",o:["Container","Image","Independent","Swarm"],a:"C"},
+{s:"Storage",q:"docker system prune removes volumes?",o:["Always","Never","With -v","Only named"],a:"C"},
+{s:"Storage",q:"Volume driver plugin used for?",o:["Images","Remote storage","Networks","Logs"],a:"B"},
+{s:"Storage",q:"Which is fastest?",o:["Bind mount","Volume","tmpfs","Overlay"],a:"C"},
+{s:"Storage",q:"docker inspect volume shows?",o:["Logs","Mountpoint","CPU","Network"],a:"B"},
+{s:"Storage",q:"Volume shared across containers?",o:["No","Yes","Swarm only","Read-only"],a:"B"},
+{s:"Storage",q:"Anonymous volume created when?",o:["Named volume","Dockerfile VOLUME","Bind mount","tmpfs"],a:"B"},
+{s:"Storage",q:"Volume removed on container rm?",o:["Always","Never","With --rm","Only swarm"],a:"C"},
+{s:"Storage",q:"Data safety best option?",o:["Writable layer","tmpfs","Volume","Overlay"],a:"C"},
+
+/* Networking (61–75) */
+{s:"Networking",q:"Default network type?",o:["bridge","host","overlay","none"],a:"A"},
+{s:"Networking",q:"docker network ls shows?",o:["Volumes","Images","Networks","Containers"],a:"C"},
+{s:"Networking",q:"Bridge network scope?",o:["Cluster","Host","Single engine","Global"],a:"C"},
+{s:"Networking",q:"Overlay network requires?",o:["Single host","Swarm","Bridge","None"],a:"B"},
+{s:"Networking",q:"Host network does?",o:["Isolate","Share host stack","Encrypt","Disable ports"],a:"B"},
+{s:"Networking",q:"None network does?",o:["Disable networking","Encrypt","Bridge","Overlay"],a:"A"},
+{s:"Networking",q:"Port mapping flag?",o:["-p","-e","-v","-n"],a:"A"},
+{s:"Networking",q:"EXPOSE does?",o:["Publishes port","Documents port","Maps port","Blocks port"],a:"B"},
+{s:"Networking",q:"DNS for containers handled by?",o:["Host","Docker","Swarm","Image"],a:"B"},
+{s:"Networking",q:"Service discovery uses?",o:["IP","DNS","Hosts file","Env only"],a:"B"},
+{s:"Networking",q:"Network driver for encryption?",o:["bridge","overlay","host","none"],a:"B"},
+{s:"Networking",q:"docker network inspect shows?",o:["CPU","Containers","Images","Volumes"],a:"B"},
+{s:"Networking",q:"Which supports multi-host?",o:["bridge","overlay","host","none"],a:"B"},
+{s:"Networking",q:"Load balancing in swarm via?",o:["iptables","Routing mesh","DNS only","Volumes"],a:"B"},
+{s:"Networking",q:"Which mode bypasses routing mesh?",o:["ingress","host","overlay","none"],a:"B"},
+
+/* Swarm (76–88) */
+{s:"Swarm",q:"Initialize swarm?",o:["docker swarm init","docker init swarm","docker start swarm","docker cluster init"],a:"A"},
+{s:"Swarm",q:"Join swarm requires?",o:["Password","Token","SSH","Cert"],a:"B"},
+{s:"Swarm",q:"Manager node role?",o:["Run tasks","Schedule & control","Store images","Log"],a:"B"},
+{s:"Swarm",q:"Worker node role?",o:["Schedule","Run tasks","Control","Store secrets"],a:"B"},
+{s:"Swarm",q:"docker service ls shows?",o:["Containers","Services","Stacks","Images"],a:"B"},
+{s:"Swarm",q:"docker stack deploy uses?",o:["Dockerfile","Compose file","Image","Volume"],a:"B"},
+{s:"Swarm",q:"Secrets available to?",o:["All nodes","Service containers","Host","Images"],a:"B"},
+{s:"Swarm",q:"Secrets mounted as?",o:["Env vars","Files","Volumes","Labels"],a:"B"},
+{s:"Swarm",q:"Config differs from secret?",o:["Encrypted","Binary","Size","Same"],a:"C"},
+{s:"Swarm",q:"Rolling update controlled by?",o:["restart-policy","update-config","replicas","networks"],a:"B"},
+{s:"Swarm",q:"Service scale command?",o:["docker service scale","docker scale","docker swarm scale","docker update"],a:"A"},
+{s:"Swarm",q:"Ingress network purpose?",o:["Storage","Routing mesh","Security","Logging"],a:"B"},
+{s:"Swarm",q:"Raft used for?",o:["Logs","State store","Images","Volumes"],a:"B"},
+
+/* Security & Troubleshooting (89–100) */
+{s:"Security",q:"Docker Content Trust provides?",o:["Encryption","Image signing","Compression","Logging"],a:"B"},
+{s:"Security",q:"docker trust enables?",o:["Signing","Secrets","Volumes","Networks"],a:"A"},
+{s:"Security",q:"Secrets stored in?",o:["Env vars","Encrypted Raft","Volumes","Images"],a:"B"},
+{s:"Security",q:"Run container as non-root?",o:["USER","ARG","ENV","LABEL"],a:"A"},
+{s:"Security",q:"Capability drop flag?",o:["--cap-drop","--no-cap","--secure","--isolate"],a:"A"},
+{s:"Troubleshooting",q:"docker events shows?",o:["Logs","Daemon events","Stats","Errors"],a:"B"},
+{s:"Troubleshooting",q:"Default logging driver?",o:["syslog","journald","json-file","none"],a:"C"},
+{s:"Troubleshooting",q:"Change logging driver via?",o:["Dockerfile","Daemon config","Image","Volume"],a:"B"},
+{s:"Troubleshooting",q:"docker logs reads from?",o:["stderr/stdout","syslog","journal","kernel"],a:"A"},
+{s:"Troubleshooting",q:"docker stats uses?",o:["cgroups","iptables","overlay","aufs"],a:"A"},
+{s:"Troubleshooting",q:"OOM kill caused by?",o:["CPU","Memory","Disk","Network"],a:"B"},
+{s:"Troubleshooting",q:"Check container exit code via?",o:["docker ps","docker inspect","docker logs","docker diff"],a:"B"}
+];
+
+const quiz = document.getElementById("quiz");
+
+/* Render questions */
+questions.forEach((q, i) => {
+  const d = document.createElement("div");
+  d.className = "question";
+  d.innerHTML = `<div class="section">Section: ${q.s}</div><b>${i+1}. ${q.q}</b>`;
+  ["A","B","C","D"].forEach((o,idx)=>{
+    d.innerHTML += `<label><input type="radio" name="q${i}" value="${o}"> ${o}. ${q.o[idx]}</label>`;
+  });
+  d.innerHTML += `<button onclick="check(${i})">Check Answer</button><div id="a${i}"></div>`;
+  quiz.appendChild(d);
+});
+
+/* Per-question check */
+function check(i){
+  const sel=document.querySelector(`input[name=q${i}]:checked`);
+  const out=document.getElementById(`a${i}`);
+  if(!sel){
+    out.innerHTML='<span class="wrong">Select an option</span>';
+    return;
+  }
+  out.innerHTML = sel.value===questions[i].a
+    ? '<span class="correct">Correct</span>'
+    : `<span class="wrong">Wrong</span> | Correct: <b>${questions[i].a}</b>`;
+}
+
+/* Final result */
+function finishExam() {
+  let correct = 0;
+  questions.forEach((q, i) => {
+    const sel = document.querySelector(`input[name=q${i}]:checked`);
+    if (sel && sel.value === q.a) correct++;
+  });
+
+  const total = questions.length;
+  const percent = Math.round((correct / total) * 100);
+  const passMark = 70;
+
+  document.getElementById("finalResult").innerHTML = `
+    <h2>Final Result</h2>
+    <p><b>Total Questions:</b> ${total}</p>
+    <p><b>Correct Answers:</b> ${correct}</p>
+    <p><b>Score:</b> ${percent}%</p>
+    <p class="${percent>=passMark?'correct':'wrong'}">
+      <b>${percent>=passMark?'PASS':'FAIL'}</b>
+    </p>
+  `;
+}
+</script>
+
+</body>
+</html>
