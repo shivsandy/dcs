@@ -1,0 +1,93 @@
+#######################################################################################
+This Deletes the images present in localmachine
+docker rmi -f $(docker images -q)
+#######################################################################################
+docker system prune
+
+✔️Removes :
+Stopped containers
+Unused networks
+Dangling images (images not tagged and not used by any container)
+Build cache
+
+❌Does NOT remove:
+Running containers
+Named volumes
+Images currently used by any container
+Volumes attached to stopped containers
+#######################################################################################
+docker system prune -a
+
+✔️Removes
+Everything from docker system prune
+ALL unused images, including:
+Tagged images
+Old versions of images not referenced by any container
+
+❌Does NOT remove
+Running containers
+Named volumes
+
+⚠️ You will lose locally cached images → next docker pull will re-download
+#######################################################################################
+docker system prune --volumes
+
+✔️Removes
+Stopped containers
+Unused networks
+Dangling images
+Build cache
+Unused volumes (not referenced by any container)
+
+❌Does NOT remove
+Volumes attached to any container (running or stopped)
+#######################################################################################
+docker container prune
+
+✔️Removes
+Stopped containers only
+
+❌Does NOT remove
+Images
+Volumes
+Networks
+Running containers
+#######################################################################################
+docker image prune
+
+✔️Removes
+Dangling images only
+
+❌Does NOT remove
+Tagged images
+Images used by containers
+
+#######################################################################################
+docker image prune -a
+
+✔️Removes
+All unused images (dangling + tagged)
+
+❌Does NOT remove
+Images used by any container
+#######################################################################################
+docker builder prune
+
+✔️Removes:
+Build cache only
+
+❌Does NOT remove:
+Containers
+Images
+Volumes
+#######################################################################################
+#######################################################################################
+#######################################################################################
+#######################################################################################
+#######################################################################################
+#######################################################################################
+#######################################################################################
+#######################################################################################
+
+
+
